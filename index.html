@@ -3,75 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Form Filler - Medallia</title>
+    <title>HelloMcDo Auto-Filler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Auto Form Filler</h1>
-        <p class="subtitle">Remplissage automatique des questionnaires Medallia</p>
+        <h1>HelloMcDo Auto-Filler</h1>
+        <p class="subtitle">Remplissage automatique du questionnaire McDonald's</p>
 
         <div class="section">
-            <h2>1. Configure tes réponses</h2>
+            <h2>Configuration</h2>
 
             <div class="config-group">
-                <label>Âge</label>
-                <select id="age">
-                    <option value="1">Moins de 15 ans</option>
-                    <option value="2" selected>Entre 15 et 24 ans</option>
-                    <option value="3">Entre 25 et 34 ans</option>
-                    <option value="4">Entre 35 et 49 ans</option>
-                    <option value="5">50 ans et plus</option>
+                <label>Numero de restaurant (4 chiffres)</label>
+                <input type="text" id="restaurant-num" value="0610" maxlength="4" pattern="[0-9]{4}">
+            </div>
+
+            <div class="config-row">
+                <div class="config-group">
+                    <label>Date debut</label>
+                    <input type="date" id="date-start">
+                </div>
+                <div class="config-group">
+                    <label>Date fin</label>
+                    <input type="date" id="date-end">
+                </div>
+            </div>
+
+            <div class="config-group">
+                <label>Plage horaire</label>
+                <div class="config-row">
+                    <input type="time" id="hour-start" value="08:00">
+                    <span>a</span>
+                    <input type="time" id="hour-end" value="22:00">
+                </div>
+                <p class="hint">Si date = aujourd'hui, l'heure sera max heure actuelle - 1h</p>
+            </div>
+
+            <div class="config-group">
+                <label>Mode de commande</label>
+                <select id="order-mode">
+                    <option value="random">Aleatoire</option>
+                    <option value="1">Borne de commande</option>
+                    <option value="2">Au comptoir</option>
+                    <option value="3">Au drive</option>
+                    <option value="4">Guichet exterieur</option>
+                    <option value="5">Click & Collect app</option>
+                    <option value="6">Click & Collect site</option>
+                    <option value="7">En livraison</option>
+                    <option value="8">Employe tablette</option>
                 </select>
             </div>
 
             <div class="config-group">
-                <label>Satisfaction générale (1-10)</label>
-                <input type="range" id="satisfaction" min="1" max="10" value="9">
-                <span id="satisfaction-value">9</span>
-            </div>
-
-            <div class="config-group">
-                <label>Mode de réponse pour les notes</label>
-                <select id="rating-mode">
-                    <option value="max">Toujours maximum</option>
-                    <option value="high" selected>Élevé (8-10)</option>
-                    <option value="medium">Moyen (5-7)</option>
-                    <option value="random">Aléatoire</option>
-                </select>
-            </div>
-
-            <div class="config-group">
-                <label>Texte pour les champs libres</label>
-                <textarea id="default-text" placeholder="Texte par défaut pour les commentaires...">Très satisfait de mon expérience. Service rapide et personnel agréable.</textarea>
-            </div>
-
-            <div class="config-group">
-                <label>Délai entre les actions (ms)</label>
-                <input type="number" id="delay" value="500" min="100" max="3000">
-            </div>
-
-            <div class="config-group">
-                <label>
-                    <input type="checkbox" id="auto-next" checked>
-                    Passer automatiquement à la page suivante
-                </label>
+                <label>Commentaire</label>
+                <textarea id="comment" placeholder="Laissez vide pour ne rien mettre">Tres bonne experience, personnel agreable et service rapide.</textarea>
             </div>
         </div>
 
-        <div class="section">
-            <h2>2. Glisse ce bouton dans ta barre de favoris</h2>
+        <div class="section rules-section">
+            <h2>Regles appliquees</h2>
+            <ul class="rules">
+                <li><strong>Age:</strong> 0% moins de 15, 10% 15-24, 30% 25-34, 20% 35-49, 40% 50+</li>
+                <li><strong>Questions aleatoires:</strong> Sur place/emporter, lieu recuperation, service livraison</li>
+                <li><strong>Meilleure reponse:</strong> Satisfaction (smiley vert), commande exacte (oui), probleme (non)</li>
+            </ul>
+        </div>
+
+        <div class="section launch-section">
+            <h2>Lancer le questionnaire</h2>
+
+            <button id="launch-btn" class="btn btn-launch">
+                Ouvrir le questionnaire + Copier le script
+            </button>
+
+            <div id="instructions" class="instructions hidden">
+                <h3>Script copie! Maintenant :</h3>
+                <ol>
+                    <li>Dans l'onglet du questionnaire, appuie sur <kbd>F12</kbd></li>
+                    <li>Clique sur l'onglet <strong>Console</strong></li>
+                    <li>Colle avec <kbd>Ctrl+V</kbd> (ou <kbd>Cmd+V</kbd> sur Mac)</li>
+                    <li>Appuie sur <kbd>Entree</kbd></li>
+                </ol>
+                <button id="recopy-btn" class="btn btn-small">Recopier le script</button>
+            </div>
+
+            <div class="separator">OU utilise le bookmarklet</div>
+
             <div class="bookmarklet-container">
-                <a id="bookmarklet" href="#" class="bookmarklet">📝 Auto Fill Medallia</a>
+                <a id="bookmarklet" href="#" class="bookmarklet">Glisse-moi dans tes favoris</a>
             </div>
-            <p class="hint">Glisse-dépose ce bouton dans ta barre de favoris, puis clique dessus quand tu es sur le questionnaire.</p>
+            <p class="hint">Glisse ce bouton dans ta barre de favoris, puis clique dessus sur n'importe quel questionnaire.</p>
         </div>
 
         <div class="section">
-            <h2>3. Ou copie le script</h2>
-            <button id="copy-btn" class="btn">Copier le script</button>
+            <h2>Script (avance)</h2>
             <textarea id="script-output" readonly></textarea>
-            <p class="hint">Colle ce script dans la console du navigateur (F12 → Console) sur la page du questionnaire.</p>
         </div>
     </div>
 
